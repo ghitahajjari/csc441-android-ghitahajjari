@@ -122,6 +122,15 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             modifier = modifier.fillMaxWidth()
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // --- Lab 7: Task 4: a live character counter ---
+        Text(
+            text = "${newMusic.length} / 40",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
         // --- Class 7: Step 4: the button changes the state ---
         Button(onClick = {
             music.add(newMusic)
@@ -130,11 +139,28 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             Text("Add song")
         }
 
+        // --- Lab 7: Task 1: remove the last item ---
+        Button(onClick = {
+            if (music.isNotEmpty()) {
+                music.removeAt(music.lastIndex)
+            }
+        }) {
+            Text("Remove last")
+        }
+
+        // --- Lab 7: Task 3: clear all ---
+        Button(onClick = {
+            music.clear()
+        }) {
+            Text("Clear All")
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
 
         // --- Class 7: Step 2: draw whatever is in the list ---
         Text(
-            text = "${music.size} songs",
+            // --- Lab 7: Task 2: 1 trail, not 1 trails ---
+            text = if (music.size == 1) "1 song" else "${music.size} songs",
             fontWeight = FontWeight.Bold
         )
 
