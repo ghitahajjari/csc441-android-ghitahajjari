@@ -78,6 +78,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     // --- Class 7: Step 3: what typed lives in state ---
     var newMusic by remember { mutableStateOf("") }
 
+    // Class 8: Step 2: the error message lives in state too ---
+    var error by remember { mutableStateOf<String?> (null) }
+
     // --- Class 6: Step 3: a column so things stack ---
     Column(
         modifier = modifier
@@ -117,25 +120,48 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         // --- Class 7: Step 3: the text field ---
         OutlinedTextField(
             value = newMusic,
-            onValueChange = { newMusic = it},
+            // --- Class 8: Step 3: the field itself pushes back ---
+            onValueChange = {
+                newMusic = it.take(MAX_NAME_LENGTH)
+                error = null
+            },
             label = { Text("Music name") },
+            singleLine = true,
+            isError = error != null,
             modifier = modifier.fillMaxWidth()
         )
+
+        error?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 14.sp
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // --- Lab 7: Task 4: a live character counter ---
         Text(
-            text = "${newMusic.length} / 40",
+            text = "${newMusic.length} / 30",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         // --- Class 7: Step 4: the button changes the state ---
         Button(onClick = {
-            music.add(newMusic)
-            newMusic = ""
-        }) {
+            // --- Class 8: Step 3: check before you add ---
+            val problem = validateMusicName(newMusic, existingMusic = music)
+            if(problem == null){
+                music.add(newMusic)
+                newMusic = ""
+            } else {
+                error = problem
+            }
+        },
+            // --- Class 8: Step 4: the sign on the door, not the lock ---
+            enabled = newMusic.isNotBlank()
+            ) {
             Text("Add song")
         }
 
@@ -180,6 +206,18 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
     }
 
+}
+const val MAX_NAME_LENGTH = 30
+
+// --- Class 8: Step 1: one rule book for music names ---
+fun validateMusicName(input: String, existingMusic: List<String>): String? {
+    val name = input.trim()
+    return when {
+        name.isEmpty() -> "Enter a Music name"
+        name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
+        existingMusic.any { it.equals(name, ignoreCase = true) } -> "$name is already on the list"
+        else -> null
+    }
 }
 
 // --- Class 6: Step 2: preview, no build required ---
