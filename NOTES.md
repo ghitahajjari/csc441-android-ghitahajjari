@@ -76,9 +76,39 @@ Week 5, Friday: I changed the padding modifier on my column from 24.dp to 48.dp.
 
 
 
-2\. The variable count changed but the screen didn't because composable was not told that the value changed. So mutableStateOf makes the variable count observable and composable is able to detect the state changes and causing the screen to change to the updated value. 
+2\. The variable count changed but the screen didn't because composable was not told that the value changed. So mutableStateOf makes the variable count observable and composable is able to detect the state changes and causing the screen to change to the updated value.
 
 
 
 3\. "remember" is used so that the composable function keeps the value that is remembered instead of creating a new one every time the function runs. Without "remember", the state would be recreated each time the function is called so the value would keep resetting.
+
+
+
+Lab 8: Task 1: if the line goes above .isEmpty(), then an empty name "" would satisfy the length minimum ruleand give a "Too short - at least 3 characters" line instead of telling the user that they need to enter a music name.
+
+
+
+Lab 8: Task 2: Music names are normally not made up of only numbers but a word. This rule prevents the user from entering accidentally IDs or codes instead of the music title.
+
+
+
+
+
+(Nothing) - Add button greyed out - yes
+
+"    " - Add button greyed out - yes
+
+"to" - Add button available but gives the error message that it is too short when clicked - yes
+
+"Marinebeachcrystalfairylongisland" - Add button available, only the 30 characters were written down and the others were cut off before the rule book ever sees them - yes
+
+"aDeLe" - Add button available but gives error message that the item typed and wanting to add is already in the list - yes
+
+"12345" - Add button available but gives the error saying my own rule because it is only numbers - yes
+
+"3rd of december" - Add button available and adds to the list - yes
+
+America - Add button available and adds to the list - yes
+
+"a" \* 30 - Add button available and adds to the list - yes
 
