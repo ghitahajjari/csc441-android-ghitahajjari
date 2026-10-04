@@ -120,7 +120,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         // --- Class 7: Step 3: the text field ---
         OutlinedTextField(
             value = newMusic,
-            // --- Class 8: Step 3: the field itself pushes back ---
+            // --- Class 8: Step 5: the field itself pushes back ---
             onValueChange = {
                 newMusic = it.take(MAX_NAME_LENGTH)
                 error = null
@@ -131,6 +131,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             modifier = modifier.fillMaxWidth()
         )
 
+        // --- Class 8: Step 4: show the problem ---
         error?.let { message ->
             Text(
                 text = message,
@@ -143,25 +144,26 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         // --- Lab 7: Task 4: a live character counter ---
         Text(
-            text = "${newMusic.length} / 30",
+            text = "${newMusic.length} / $MAX_NAME_LENGTH",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         // --- Class 7: Step 4: the button changes the state ---
-        Button(onClick = {
-            // --- Class 8: Step 3: check before you add ---
-            val problem = validateMusicName(newMusic, existingMusic = music)
-            if(problem == null){
-                music.add(newMusic)
-                newMusic = ""
-            } else {
-                error = problem
-            }
-        },
-            // --- Class 8: Step 4: the sign on the door, not the lock ---
+        Button(
+            onClick = {
+                // --- Class 8: Step 3: check before you add ---
+                val problem = validateMusicName(newMusic, existingMusic = music)
+                if (problem == null) {
+                    music.add(newMusic.trim())
+                    newMusic = ""
+                } else {
+                    error = problem
+                }
+            },
+            // --- Class 8: Step 6: the sign on the door, not the lock ---
             enabled = newMusic.isNotBlank()
-            ) {
+        ) {
             Text("Add song")
         }
 
@@ -214,7 +216,11 @@ fun validateMusicName(input: String, existingMusic: List<String>): String? {
     val name = input.trim()
     return when {
         name.isEmpty() -> "Enter a Music name"
+        // --- Lab 8: Task 1: minimum length ---
+        name.length < 3 -> "Too short - at least 3 characters"
         name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
+        // --- Lab 8: Task 2: music is not just numbers ---
+        name.all { it.isDigit() } -> "my own rule"
         existingMusic.any { it.equals(name, ignoreCase = true) } -> "$name is already on the list"
         else -> null
     }
