@@ -3,12 +3,18 @@ package edu.lemoyne.campusapp
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -21,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -53,9 +60,16 @@ fun PlaylistLogScreen(modifier: Modifier = Modifier) {
             "Purple",
             "4th of July",
             "Flemme",
-            "In another life"
+            "In another life",
+            "Maybe next time"
         )
     }
+
+    // --- Class 10: Step 1: see the problem ---
+    //val music = remember {
+     //   (1..60).map { "Test music $it" }.toMutableList()
+    //}
+
     // --- Class 9: Step 4: which screen is showing is just state ---
     var currentScreen by rememberSaveable { mutableStateOf("home") }
 
@@ -71,6 +85,8 @@ fun PlaylistLogScreen(modifier: Modifier = Modifier) {
         "list" -> ListScreen(
             music = music,
             onBack = { currentScreen = "home" },
+            // --- Class 10: Step 4: only the owner changes the list ---
+            onRemove = { music.remove(it) },
             modifier = modifier
         )
         // --- Lab 9: Task 2: add about screen case ---
@@ -229,6 +245,7 @@ fun HomeScreen(
 fun ListScreen(
     music: List<String>,
     onBack: () -> Unit,
+    onRemove: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -236,8 +253,8 @@ fun ListScreen(
     BackHandler { onBack() }
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(24.dp)
+            .fillMaxSize()
+            .padding(horizontal = 24.dp)
     ) {
         TextButton(onClick = onBack) {
             Text("Back")
@@ -260,12 +277,59 @@ fun ListScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        for (song in music){
-            Text(text = song, fontSize = 18.sp, modifier = Modifier.padding(vertical = 6.dp))
+        //for (song in music){
+            //Text(text = song, fontSize = 18.sp, modifier = Modifier.padding(vertical = 6.dp))
+        //}
+
+
+        // --- Class 10: Step 5: the empty case ---
+        if(music.isEmpty()) {
+            Text(
+                text = "No songs yet. Add one on the home screen.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        } else {
+            // --- Class 10: Step 2: a list that scrolls ---
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(music) { music ->
+                    //Text(text = music, fontSize = 18.sp)
+                    MusicRow(
+                        name = music,
+                        onRemove = { onRemove(music) }
+                    )
+                }
+            }
         }
     }
 }
 
+
+// --- Class 10: Step 3: one row, as its own composable ---
+@Composable
+fun MusicRow(
+    name: String,
+    onRemove: () -> Unit
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = name,
+                fontSize = 18.sp,
+                modifier = Modifier.weight(1f)
+            )
+
+            // --- Class 10: Step 4: a remove button on every row ---
+            TextButton(onClick = onRemove) {
+                Text("Remove")
+            }
+        }
+    }
+}
 
 // --- Lab 9: Task 2: a third screen ---
 @Composable
@@ -372,7 +436,21 @@ fun ListScreenPreview() {
                     "Flemme",
                     "In another life"
                 ),
-            onBack = {}
+            onBack = {},
+            onRemove = {}
+        )
+    }
+}
+
+// --- Class 10: Step 5: preview the empty case too ---
+@Preview(showBackground = true)
+@Composable
+fun ListScreenEmptyPreview() {
+    CampusAppTheme {
+        ListScreen(
+            music = emptyList(),
+            onBack = {},
+            onRemove = {}
         )
     }
 }
