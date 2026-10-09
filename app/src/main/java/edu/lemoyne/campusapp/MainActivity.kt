@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    // --- Class 9: Step 2: the app starts at the owner ---
                     PlaylistLogScreen(modifier = Modifier.padding(innerPadding))
                 }
             }

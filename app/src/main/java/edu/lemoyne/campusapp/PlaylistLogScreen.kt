@@ -63,11 +63,19 @@ fun PlaylistLogScreen(modifier: Modifier = Modifier) {
         "home" -> HomeScreen(
             music = music,
             onAddSong = { music.add(it) },
-            onSeeAll = { currentScreen = "list" }
+            onSeeAll = { currentScreen = "list" },
+            // --- Lab 9: Task 2: add about screen case ---
+            onAbout = { currentScreen = "about"},
+            modifier = modifier
         )
         "list" -> ListScreen(
             music = music,
             onBack = { currentScreen = "home" },
+            modifier = modifier
+        )
+        // --- Lab 9: Task 2: add about screen case ---
+        "about" -> AboutScreen(
+            onBack = { currentScreen = "home"},
             modifier = modifier
         )
     }
@@ -75,11 +83,14 @@ fun PlaylistLogScreen(modifier: Modifier = Modifier) {
 }
 
 // --- Class 6: Step 1: my own screen ---
+// --- Class 9: Step 2: Homescreen gets its data from outside ---
 @Composable
 fun HomeScreen(
-    music: MutableList<String>,
+    music: List<String>,
     onAddSong: (String) -> Unit,
     onSeeAll: () -> Unit,
+    // Lab 9: Task 2: add about screen case ---
+    onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // --- Class 7: Step 3: what typed lives in state ---
@@ -104,7 +115,7 @@ fun HomeScreen(
                 .height(180.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        //Spacer(modifier = Modifier.height(16.dp))
 
         // --- Class 6: Step 4: real styling ---
         Text(
@@ -161,10 +172,11 @@ fun HomeScreen(
                 // --- Class 8: Step 3: check before you add ---
                 val problem = validateMusicName(newMusic, existingMusic = music)
                 if (problem == null) {
-                    // --- Class 9: Step 3: ---
-                   onAddSong(newMusic.trim())
-                    music.add(newMusic.trim())
+                    // --- Class 9: Step 3: ask the owner to add it ---
+                    onAddSong(newMusic.trim())
+                    //music.add(newMusic.trim())
                     newMusic = ""
+                    error = null
                 } else {
                     error = problem
                 }
@@ -176,7 +188,7 @@ fun HomeScreen(
         }
 
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         // --- Class 7: Step 2: draw whatever is in the list ---
         Text(
@@ -187,13 +199,17 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // ---Class 9: Step5: a way to teh second screen ---
-        Button(
-            onClick = onSeeAll
-        ) {
+        // ---Class 9: Step 5: a way to the second screen ---
+        Button(onClick = onSeeAll) {
             Text(text = "See all songs")
         }
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // --- Lab 9: Task 2: add about screen case ---
+        TextButton(onClick = onAbout) {
+           Text(text = "About")
+        }
 
         // --- Lab 6: Task 2: footer line ---
         Spacer(modifier = Modifier.height(24.dp))
@@ -216,7 +232,7 @@ fun ListScreen(
     modifier: Modifier = Modifier
 ) {
 
-    // --- Class 9: Step 6: the phone's back button goes home to ---
+    // --- Class 9: Step 6: the phone's back button goes home too ---
     BackHandler { onBack() }
     Column(
         modifier = modifier
@@ -235,15 +251,57 @@ fun ListScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // --- Lab 9: Task 1: count on the list screen ---
+        Text(
+            text = if (music.size == 1) "1 song" else "${music.size} songs",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         for (song in music){
-            Text(text = song, fontSize = 18.sp)
+            Text(text = song, fontSize = 18.sp, modifier = Modifier.padding(vertical = 6.dp))
         }
     }
 }
 
-const val MAX_NAME_LENGTH = 30
+
+// --- Lab 9: Task 2: a third screen ---
+@Composable
+fun AboutScreen(
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    BackHandler { onBack() }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+    ){
+        TextButton(onClick = onBack) {
+            Text("Back")
+        }
+
+        Text(
+            text = "About",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(text = "Playlist Log keeps track of the songs I've listened to.")
+        Text(text = "Built for CSC 441 by Ghita Hajjari.")
+        Text(text = "Please enjoy your music!")
+        Text(text = "Add any recommendations.")
+    }
+}
+
 
 // --- Class 8: Step 1: one rule book for music names ---
+const val MAX_NAME_LENGTH = 30
 fun validateMusicName(input: String, existingMusic: List<String>): String? {
     val name = input.trim()
     return when {
@@ -259,22 +317,23 @@ fun validateMusicName(input: String, existingMusic: List<String>): String? {
 }
 
 // --- Class 6: Step 2: preview, no build required ---
+// --- Class 9: Step 3: previews need sample data now ---
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     CampusAppTheme {
         HomeScreen(
-            music = remember {
-                mutableStateListOf(
+            music = listOf(
                 "Orbiter",
                 "Purple",
                 "4th of July",
                 "Flemme",
                 "In another life"
-            )
-        },
+            ),
             onAddSong = {},
-            onSeeAll = {}
+            onSeeAll = {},
+            // --- Lab 9: Task 2: add about screen case ---
+            onAbout = {}
         )
     }
 }
@@ -285,37 +344,35 @@ fun HomeScreenPreview() {
 fun HomeScreenDarkPreview() {
     CampusAppTheme {
         HomeScreen(
-            music = remember {
-                mutableStateListOf(
+            music = listOf(
                     "Orbiter",
                     "Purple",
                     "4th of July",
                     "Flemme",
                     "In another life"
-                )
-            },
+                ),
             onAddSong = {},
-            onSeeAll = {}
+            onSeeAll = {},
+            // --- Lab 9: Task 2: add about screen case ---
+            onAbout = {}
         )
     }
 }
 
+// --- Class 9: Step 7: preview the list screen ---
 @Preview(showBackground = true)
 @Composable
 fun ListScreenPreview() {
     CampusAppTheme {
         ListScreen(
-            music = remember {
-                mutableStateListOf(
+            music = listOf(
                     "Orbiter",
                     "Purple",
                     "4th of July",
                     "Flemme",
                     "In another life"
-                )
-            },
+                ),
             onBack = {}
         )
     }
-
 }

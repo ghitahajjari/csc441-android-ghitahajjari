@@ -112,3 +112,14 @@ America - Add button available and adds to the list - yes
 
 "a" \* 30 - Add button available and adds to the list - yes
 
+
+
+
+
+Lab 9: Task 3: rotation of emulator
+
+1. I was still on the list screen after the rotation.
+2. After rotating the emulator, the two new songs I Added were not there anymore. 
+
+3\. currentScreen uses rememberSaveable, which means it remembers what screen I was on after rotating the device, but music uses remember that only lists the original items in music after rotation as the activity is recreated after rotating the emulator.
+
