@@ -1,4 +1,4 @@
-### Playlist Log
+# Playlist Log
 
 
 
@@ -6,37 +6,31 @@ Playlist Log is an Android app that helps users keep track of the songs they hav
 
 
 
-\## Screens
+## Screens
 
 
 
-* \*\*Home\*\* — Allows users to add songs to their playlist.
-* \*\*List\*\* — Displays the songs the user has added and the total number of songs. Users can view their songs, remove individual songs, remove all songs, and return to the Home screen.
-* \*\*About\*\* — Provides information about the app.
+- **Home** — Allows users to add songs to their playlist.
+- **List** — Displays the songs the user has added and the total number of songs. Users can view their songs, remove individual songs, remove all songs, and return to the Home screen.
+- **About** — Provides information about the app.
 
 
 
-\## Input Rules
+## Input Rules
 
 
 
 | Input | What the app says |
-
-|---|---|
-
+| --- | --- |
 | Empty name | Enter a music name. |
-
 | Fewer than 3 characters | Too short — at least 3 characters. |
-
 | More than 30 characters | Keep it to the maximum length characters. |
-
 | Name containing only numbers | Song can't be just numbers. |
-
 | Duplicate song name, ignoring capitalization | Song is already on the list. |
 
 
 
-\## How to Run
+## How to Run
 
 
 
@@ -50,7 +44,7 @@ Playlist Log is an Android app that helps users keep track of the songs they hav
 
 
 
-\## Known Limitations
+## Known Limitations
 
 
 
