@@ -87,6 +87,7 @@ fun PlaylistLogScreen(modifier: Modifier = Modifier) {
             onBack = { currentScreen = "home" },
             // --- Class 10: Step 4: only the owner changes the list ---
             onRemove = { music.remove(it) },
+            onRemoveAll = { music.clear() },
             modifier = modifier
         )
         // --- Lab 9: Task 2: add about screen case ---
@@ -246,6 +247,7 @@ fun ListScreen(
     music: List<String>,
     onBack: () -> Unit,
     onRemove: (String) -> Unit,
+    onRemoveAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -275,6 +277,13 @@ fun ListScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
+        // --- Lab 10: Task 2: remove all, through the owner ---
+        if(music.isNotEmpty()) {
+            TextButton(onClick = onRemoveAll) {
+                Text("Remove all")
+            }
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         //for (song in music){
@@ -288,6 +297,11 @@ fun ListScreen(
                 text = "No songs yet. Add one on the home screen.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            // --- Lab 10: Task 1: a way out of the empty screen ---
+            TextButton(onClick = onBack) {
+                Text("Back Home")
+            }
         } else {
             // --- Class 10: Step 2: a list that scrolls ---
             LazyColumn(
@@ -437,7 +451,8 @@ fun ListScreenPreview() {
                     "In another life"
                 ),
             onBack = {},
-            onRemove = {}
+            onRemove = {},
+            onRemoveAll = {}
         )
     }
 }
@@ -450,7 +465,8 @@ fun ListScreenEmptyPreview() {
         ListScreen(
             music = emptyList(),
             onBack = {},
-            onRemove = {}
+            onRemove = {},
+            onRemoveAll = {}
         )
     }
 }
