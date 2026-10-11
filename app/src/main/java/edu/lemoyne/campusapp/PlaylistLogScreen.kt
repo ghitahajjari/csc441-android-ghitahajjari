@@ -232,7 +232,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Last updated September 2026",
+            text = "Last updated October 2026",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -388,7 +388,7 @@ fun validateMusicName(input: String, existingMusic: List<String>): String? {
         name.length < 3 -> "Too short - at least 3 characters"
         name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
         // --- Lab 8: Task 2: music is not just numbers ---
-        name.all { it.isDigit() } -> "my own rule"
+        name.all { it.isDigit() } -> "Song can't be just numbers"
         existingMusic.any { it.equals(name, ignoreCase = true) } -> "$name is already on the list"
         else -> null
     }
@@ -468,5 +468,14 @@ fun ListScreenEmptyPreview() {
             onRemove = {},
             onRemoveAll = {}
         )
+    }
+}
+
+// --- Lab 10: CheckPoint 1: about preview ---
+@Preview(showBackground = true)
+@Composable
+fun AboutScreenPreview() {
+    CampusAppTheme {
+        AboutScreen(onBack = {})
     }
 }
