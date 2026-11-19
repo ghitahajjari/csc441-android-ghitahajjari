@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,17 +35,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
 
 class MainActivity : ComponentActivity() {
+    // Class 21: Step 6: pass state in main activity
+    private val showcaseViewModel: ShowcaseViewModel by viewModels ()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        showcaseViewModel.refresh()
         enableEdgeToEdge()
+
         setContent {
+            val showcaseState by showcaseViewModel.state.collectAsStateWithLifecycle()
+            showcaseViewModel
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     // --- Class 9: Step 2: the app starts at the owner ---
-                    PlaylistLogScreen(modifier = Modifier.padding(innerPadding))
+                    PlaylistLogScreen(
+                        showcaseState = showcaseState,
+                        onRefreshShowcase = showcaseViewModel::refresh,
+                        modifier = Modifier.padding(innerPadding))
                 }
             }
         }

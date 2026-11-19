@@ -52,7 +52,11 @@ fun CounterDemo() {
 
 // --- Class 9: Step 2: one owner for the data ---
 @Composable
-fun PlaylistLogScreen(modifier: Modifier = Modifier) {
+fun PlaylistLogScreen(
+    showcaseState: ShowcaseUiState,
+    onRefreshShowcase: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     // --- Class 7: Step 2: the list lives in state---
     val music = remember {
         mutableStateListOf(
@@ -80,6 +84,8 @@ fun PlaylistLogScreen(modifier: Modifier = Modifier) {
             onSeeAll = { currentScreen = "list" },
             // --- Lab 9: Task 2: add about screen case ---
             onAbout = { currentScreen = "about"},
+            // Class 21: Step 5: navigation to existing screen
+            onInterestsClick = { currentScreen = "interests" },
             modifier = modifier
         )
         "list" -> ListScreen(
@@ -95,6 +101,13 @@ fun PlaylistLogScreen(modifier: Modifier = Modifier) {
             onBack = { currentScreen = "home"},
             modifier = modifier
         )
+        // Class 21: Step 5: navigation to existing screen
+        "interests" -> InterestsScreen(
+            state = showcaseState,
+            onBack = { currentScreen = "home" },
+            onRefresh = onRefreshShowcase,
+            modifier = modifier
+        )
     }
 
 }
@@ -108,6 +121,8 @@ fun HomeScreen(
     onSeeAll: () -> Unit,
     // Lab 9: Task 2: add about screen case ---
     onAbout: () -> Unit,
+    // Class 21: Step 5: navigation to existing screen
+    onInterestsClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     // --- Class 7: Step 3: what typed lives in state ---
@@ -227,6 +242,9 @@ fun HomeScreen(
         TextButton(onClick = onAbout) {
            Text(text = "About")
         }
+
+        // Class 21: Step 5: navigation to existing screen
+        Button(onClick = onInterestsClick) { Text("My Interests") }
 
         // --- Lab 6: Task 2: footer line ---
         Spacer(modifier = Modifier.height(24.dp))

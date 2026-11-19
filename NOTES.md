@@ -119,7 +119,19 @@ America - Add button available and adds to the list - yes
 Lab 9: Task 3: rotation of emulator
 
 1. I was still on the list screen after the rotation.
-2. After rotating the emulator, the two new songs I Added were not there anymore. 
+2. After rotating the emulator, the two new songs I Added were not there anymore.
 
 3\. currentScreen uses rememberSaveable, which means it remembers what screen I was on after rotating the device, but music uses remember that only lists the original items in music after rotation as the activity is recreated after rotating the emulator.
+
+
+
+Week 13, Wednesday: Lab 21
+
+1. When InterestsScreen first opens, 'LaunchedEffect(Unit)' runs automatically and calls onRefresh(), which runs'showcaseViewModel.refresh().
+2. Tapping the Reresh items button calls 'onClick = onRefresh' callback, which runs 'showcaseViewModel.refresh()' again.
+3. It keeps the InterestsSCreen simpler and reusable without needing direct access to the ViewModel since MainActivity already owns it.
+4. A successful response means the request worked (HTTP 200) and the table is just empty, so it shows "no items yet". A network Failure means the app couldn't connect to Supabase at all so it throws an error to show the error message.
+5. I compared the titles and categories on 'interests.html' with the Android app, and when I edited a title in Supabase and tapped "Refresh items", the new title showed up in the app. 
+
+
 
