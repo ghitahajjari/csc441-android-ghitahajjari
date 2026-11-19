@@ -2,6 +2,7 @@ package edu.lemoyne.campusapp
 
 import com.google.gson.annotations.SerializedName
 
+// Class 21: Step 2: data class and api interface
 data class ShowcaseItem(
     @SerializedName("id") var id: Int,
     @SerializedName("title") var title: String,

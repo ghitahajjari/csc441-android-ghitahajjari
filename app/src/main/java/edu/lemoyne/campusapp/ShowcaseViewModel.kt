@@ -3,30 +3,31 @@ package edu.lemoyne.campusapp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed class ShowcaseUIStates {
-    data object Loading: ShowcaseUIStates()
-    data class Success(val item: List<ShowcaseItem>): ShowcaseUIStates()
-    data class Error(val message: String): ShowcaseUIStates()
+// Class 21: Step 3: viewmodel
+sealed class ShowcaseUiState {
+    data object Loading: ShowcaseUiState()
+    data class Success(val items: List<ShowcaseItem>): ShowcaseUiState()
+    data class Error(val message: String): ShowcaseUiState()
 }
 
 class ShowcaseViewModel: ViewModel() {
     private val repository = ShowcaseRepository()
 
 
-    private val _uiState = MutableStateFlow<ShowcaseUIStates>(ShowcaseUIStates.Loading)
-    val uiState: StateFlow<ShowcaseUIStates> = _uiState
+    private val _state = MutableStateFlow<ShowcaseUiState>(ShowcaseUiState.Loading)
+    val state = _state.asStateFlow()
 
     fun refresh() {
         viewModelScope.launch {
-            _uiState.value = ShowcaseUIStates.Loading
+            _state.value = ShowcaseUiState.Loading
             try {
                 val items = repository.loadItems()
-                _uiState.value = ShowcaseUIStates.Success(items)
+                _state.value = ShowcaseUiState.Success(items)
             } catch(error: Exception) {
-                _uiState.value = ShowcaseUIStates.Error(error.message ?: "Network error")
+                _state.value = ShowcaseUiState.Error(error.message ?: "Network error")
             }
         }
     }
