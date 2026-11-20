@@ -101,6 +101,9 @@ fun PlaylistLogScreen(
             onBack = { currentScreen = "home"},
             modifier = modifier
         )
+
+
+
         // Class 21: Step 5: navigation to existing screen
         "interests" -> InterestsScreen(
             state = showcaseState,
