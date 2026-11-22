@@ -6,8 +6,17 @@ import kotlinx.coroutines.withContext
 // Class 21: Step 3: repository
 class ShowcaseRepository(private val api: ShowcaseAPI = ShowcaseService.api) {
 
-    suspend fun loadItems(): List<ShowcaseItem> =
+    // Class 22: Step 2: extend showcaserepository
+    suspend fun loadItems(token: String): List<ShowcaseItem> =
         withContext(Dispatchers.IO) {
-            api.getShowcaseItems(ShowcaseService.API_KEY)
+            api.getShowcaseItems(ShowcaseService.API_KEY, "Bearer $token")
+        }
+
+    suspend fun signIn(email: String, password: String): String =
+        withContext(Dispatchers.IO) {
+            api.signIn(
+                ShowcaseService.API_KEY,
+                LoginRequest(email, password)
+            ).accessToken
         }
 }

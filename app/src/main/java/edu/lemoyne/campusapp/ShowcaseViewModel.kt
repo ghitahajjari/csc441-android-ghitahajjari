@@ -20,11 +20,23 @@ class ShowcaseViewModel: ViewModel() {
     private val _state = MutableStateFlow<ShowcaseUiState>(ShowcaseUiState.Loading)
     val state = _state.asStateFlow()
 
+    // Class 22: Step 3: keep showcaseviewmodel add login support
+    private var accessToken: String? = null
+
+    fun setAccessToken(token: String) {
+        accessToken = token
+    }
+
     fun refresh() {
+        val token = accessToken ?: run{
+            _state.value = ShowcaseUiState.Error("Please log in first")
+            return
+        }
+
         viewModelScope.launch {
             _state.value = ShowcaseUiState.Loading
             try {
-                val items = repository.loadItems()
+                val items = repository.loadItems(token)
                 _state.value = ShowcaseUiState.Success(items)
             } catch(error: Exception) {
                 _state.value = ShowcaseUiState.Error(error.message ?: "Network error")
