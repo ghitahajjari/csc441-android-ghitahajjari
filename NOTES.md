@@ -131,7 +131,11 @@ Week 13, Wednesday: Lab 21
 2. Tapping the Reresh items button calls 'onClick = onRefresh' callback, which runs 'showcaseViewModel.refresh()' again.
 3. It keeps the InterestsSCreen simpler and reusable without needing direct access to the ViewModel since MainActivity already owns it.
 4. A successful response means the request worked (HTTP 200) and the table is just empty, so it shows "no items yet". A network Failure means the app couldn't connect to Supabase at all so it throws an error to show the error message.
-5. I compared the titles and categories on 'interests.html' with the Android app, and when I edited a title in Supabase and tapped "Refresh items", the new title showed up in the app. 
+5. I compared the titles and categories on 'interests.html' with the Android app, and when I edited a title in Supabase and tapped "Refresh items", the new title showed up in the app.
 
 
+
+\-AI use:
+
+None
 

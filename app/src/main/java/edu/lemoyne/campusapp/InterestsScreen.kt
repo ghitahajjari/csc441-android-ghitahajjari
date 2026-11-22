@@ -24,9 +24,10 @@ fun InterestsScreen(
     modifier: Modifier = Modifier,
 ) {
     // Lab 21: Task 1:load when the screen opens
-    LaunchedEffect(Unit) {
-        onRefresh()
-    }
+    //LaunchedEffect(Unit) {
+        //onRefresh()
+    //}
+
     BackHandler { onBack() }
     Column(modifier = modifier
         .fillMaxSize()

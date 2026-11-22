@@ -41,22 +41,35 @@ import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
 class MainActivity : ComponentActivity() {
     // Class 21: Step 6: pass state in main activity
     private val showcaseViewModel: ShowcaseViewModel by viewModels ()
+    // Class 22: Step 5: wire the viewmodels in mainactivity
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showcaseViewModel.refresh()
+        // showcaseViewModel.refresh()
         enableEdgeToEdge()
 
         setContent {
             val showcaseState by showcaseViewModel.state.collectAsStateWithLifecycle()
+            // Class 22: Step 5: wire the viewmodels in mainactivity
+            val loginState by loginViewModel.state.collectAsStateWithLifecycle()
             showcaseViewModel
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     // --- Class 9: Step 2: the app starts at the owner ---
                     PlaylistLogScreen(
                         showcaseState = showcaseState,
+                        loginState = loginState,
                         onRefreshShowcase = showcaseViewModel::refresh,
-                        modifier = Modifier.padding(innerPadding))
+                        onLogin = { email, password, navigate ->
+                            loginViewModel.login(email, password) { token ->
+                                showcaseViewModel.setAccessToken(token)
+                                showcaseViewModel.refresh()
+                                navigate()
+                            }
+                        },
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }

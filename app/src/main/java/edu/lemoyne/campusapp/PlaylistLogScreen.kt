@@ -54,7 +54,10 @@ fun CounterDemo() {
 @Composable
 fun PlaylistLogScreen(
     showcaseState: ShowcaseUiState,
+    // Class 22: Step 6: extend the existing when(currentscreen)
+    loginState: LoginUiState,
     onRefreshShowcase: () -> Unit,
+    onLogin: (String, String, () -> Unit) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // --- Class 7: Step 2: the list lives in state---
@@ -85,7 +88,8 @@ fun PlaylistLogScreen(
             // --- Lab 9: Task 2: add about screen case ---
             onAbout = { currentScreen = "about"},
             // Class 21: Step 5: navigation to existing screen
-            onInterestsClick = { currentScreen = "interests" },
+            // Class 22: Step 6: extend the existing when(currentscreen)
+            onInterestsClick = { currentScreen = "login" },
             modifier = modifier
         )
         "list" -> ListScreen(
@@ -107,8 +111,18 @@ fun PlaylistLogScreen(
         // Class 21: Step 5: navigation to existing screen
         "interests" -> InterestsScreen(
             state = showcaseState,
-            onBack = { currentScreen = "home" },
+            // Class 22: Step 6: extend the existing when(currentscreen)
             onRefresh = onRefreshShowcase,
+            onBack = { currentScreen = "home" },
+            modifier = modifier
+        )
+
+        // Class 22: Step 6: extend the existing when(currentscreen)
+        "login" -> LoginScreen(
+            state = loginState,
+            onLogin = { email, password ->
+                onLogin(email, password) { currentScreen ="interests" }
+            },
             modifier = modifier
         )
     }
@@ -253,7 +267,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Last updated October 2026",
+            text = "Last updated November 2026",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

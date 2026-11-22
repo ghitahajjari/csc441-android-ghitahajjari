@@ -8,17 +8,20 @@ import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 
 // Class 21: Step 2: data class and api interface
 
 interface ShowcaseAPI {
+
+    // Class 22: Step 2: extend showcaseapi
     @GET("/rest/v1/showcase_items")
     suspend fun getShowcaseItems(
         @Header("apikey") apikey: String,
         @Header("Authorization") authorization: String
     ): List<ShowcaseItem>
 
-    @GET("/auth/v1/token?grant_type=password")
+    @POST("/auth/v1/token?grant_type=password")
     suspend fun signIn(
         @Header("apikey") apiKey: String,
         @Body request: LoginRequest
@@ -37,6 +40,8 @@ object ShowcaseService {
         .create(ShowcaseAPI::class.java)
 }
 
+
+// Class 22: Step 2: extend showcaseapi
 data class LoginRequest(
     val email: String,
     val password: String
